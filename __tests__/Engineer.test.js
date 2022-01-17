@@ -9,7 +9,7 @@ describe('Test suite for Engineer Class implementation', () => {
             expect(engineer.name).toBe('Tomato Jones');
 
             expect(engineer.id).toStrictEqual(expect.any(Number));
-            expect(engineer.id).toBe('Tomato Jones');
+            expect(engineer.id).toBe(1231);
 
             expect(engineer.email).toStrictEqual(expect.any(String));
             expect(engineer.email).toBe('tj@jonson.com');
