@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const Engineer = require('../lib/Engineer');
 const Intern = require('../lib/Intern');
 const Manager = require('../lib/Manager');
+const path = require('path');
 const  writeToFile = require('../src/htmlFormatter');
 
 const { managerQuestions, engineerQuestions, internQuestions, menuOptionQuestions } = require('./Questions');
@@ -32,8 +33,11 @@ class Prompts {
             this.initiateMenuOptions();
         })
     };
+    
     initiateFinishBuild() {
-        generateCards(); 
+        writeToFile(
+           path.join(__dirname, '../dist/team.html')
+            , this.data);
     };
 
     initiateMenuOptions() {
@@ -69,9 +73,11 @@ class Prompts {
             managerOffice = parseInt(managerOffice);
             this.data.manager.push(new Manager(managerName, managerID, managerEmail, managerOffice)); 
             this.initiateMenuOptions();
-        }).then(() => {
-            writeToFile('../dist/team.html', this.data);
-        })
+        });
     };
+
+// .then(() => {
+//             writeToFile('../dist/team.html', this.data);
+//         })
 };
 module.exports = Prompts;
