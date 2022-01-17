@@ -1,89 +1,84 @@
 const fs = require('fs');
 
-const roleItem = function(data, role) {
-    if (role === 'manager') {
-        return `<li class="list-group-item">Office Number: ${data.officeNumber}</li>`
-    } else if (role === 'engineers') {
-        return `<li class="list-group-item">GitHub: <a href="#" class="card-link">${data.github}</a></li>`
-    } else {
-        return `<li class="list-group-item">School: ${data.school}</li>`
-    }
-}
-
 const generateManagerCard = (data) => {
-    return `
+    var string = '';
+    data.manager.forEach(manager => {
+        string += `
     <div class="col-3">
         <div class="card" style="width: 18rem;">
                 <div class="card-body">
                 
-                    <h5 class="card-title">${data.manager[0].name}</h5>
-                    <h5>Manager</h5>
+                    <h5 class="card-title">${manager.getName()}</h5>
+                    <h5>${manager.getRole()}</h5>
                 </div>
                 <div class="d-flex justify-content-center">
                     <div class="pt-10 border border-dark w-75">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">${data.manager[0].id}</li>
-                            <li class="list-group-item">Email: <a href="#" class="card-link">${data.manager[0].email}</a></li>
-                        <li class="list-group-item">Office Number: ${data.manager[0].officeNumber}</li> 
+                            <li class="list-group-item">${manager.getId()}</li>
+                            <li class="list-group-item">Email: <a href="#" class="card-link">${manager.getEmail()}</a></li>
+                        <li class="list-group-item">Office Number: ${manager.officeNumber}</li> 
                         </ul>
                     </div>
                 </div>
             </div> 
         </div>`;
+    })
+    return string;
 };
 
 const generateEngineerCard = data => {
-    return `<div class="col-3">
+    var string = '';
+    data.engineers.forEach(engineer => {
+        string += `<div class="col-3">
         <div class="card" style="width: 18rem;">
             <div class="card-body">
             
-                <h5 class="card-title">${data.engineers[0].name}</h5>
-                <h5>Engineer</h5>
+                <h5 class="card-title">${engineer.getName()}</h5>
+                <h5>${engineer.getRole()}</h5>
             </div>
             <div class="d-flex justify-content-center">
                 <div class="pt-10 border border-dark w-75">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">${data.engineers[0].id}</li>
-                        <li class="list-group-item">Email: <a href="#" class="card-link">${data.engineers[0].email}</a></li>
-                        <li class="list-group-item">GitHub: <a href="#" class="card-link">${data.engineers[0].github}</a></li>
+                        <li class="list-group-item">${engineer.getId()}</li>
+                        <li class="list-group-item">Email: <a href="#" class="card-link">${engineer.getEmail()}</a></li>
+                        <li class="list-group-item">GitHub: <a href="#" class="card-link">${engineer.getGitHub()}</a></li>
                     </ul>
                 </div>
             </div>
         </div> 
-    </div>`   
+    </div>`
+    })
+    return string;
 };
 
 const generateInternCard = data => {
-    return `<div class="col-3">
+    if (data.interns.length === 0) {
+        return '';
+    }
+    var string ='';
+    data.interns.forEach(intern => {
+        string += `<div class="col-3">
         <div class="card" style="width: 18rem;">
             <div class="card-body">
             
-                <h5 class="card-title">${data.interns[0].name}</h5>
-                <h5>Intern</h5>
+                <h5 class="card-title">${intern.getName()}</h5>
+                <h5>${intern.getRole()}</h5>
             </div>
             <div class="d-flex justify-content-center">
                 <div class="pt-10 border border-dark w-75">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">${data.interns[0].id}</li>
-                        <li class="list-group-item">Email: <a href="#" class="card-link">${data.interns[0].email}</a></li>
-                        <li class="list-group-item">School: ${data.interns[0].school}</li>
+                        <li class="list-group-item">${intern.getId()}</li>
+                        <li class="list-group-item">Email: <a href="#" class="card-link">${intern.getEmail()}</a></li>
+                        <li class="list-group-item">School: ${intern.getSchool()}</li>
                     </ul>
                 </div>
             </div>
         </div> 
     </div>`;
+    })
+    return string;
 };
-const parseCard = function(data) {
-    var string = '';
-    for (const [key, value] of Object.entries(data)) {
-        if (key === 'engineers' || key ==='interns' || key==='manager'){
-            console.log(data[key])
-            data[key].forEach(item => {
-                return generateCard(item, key)
-            })
-        }
-    };
-};
+
 
 
 const generateHTML = function(data) {    
@@ -117,68 +112,3 @@ const writeToFile = function(filename, data) {
 };
 
 module.exports =  writeToFile;
-
-
-// ${data.filter(({ manager })).map(({ name, id, email, officeNumber }) =>  {
-//     return `<div class="col-3">
-//         <div class="card" style="width: 18rem;">
-//             <div class="card-body">
-            
-//                 <h5 class="card-title">${name}</h5>
-//                 <h5>Manager</h5>
-//             </div>
-//             <div class="d-flex justify-content-center">
-//                 <div class="pt-10 border border-dark w-75">
-//                     <ul class="list-group list-group-flush">
-//                         <li class="list-group-item">${id}</li>
-//                         <li class="list-group-item">Email: <a href="#" class="card-link">${email}</a></li>
-//                        <li class="list-group-item">Office Number: ${officeNumber}</li> 
-//                     </ul>
-//                 </div>
-//             </div>
-//         </div> 
-//     </div>
-//     `}).join('')}; 
-
-// ${data.filter(({ engineers })).forEach(item => item.map(({ name, id, email, github }) =>  {
-//     return `<div class="col-3">
-//         <div class="card" style="width: 18rem;">
-//             <div class="card-body">
-            
-//                 <h5 class="card-title">${name}</h5>
-//                 <h5>Engineer</h5>
-//             </div>
-//             <div class="d-flex justify-content-center">
-//                 <div class="pt-10 border border-dark w-75">
-//                     <ul class="list-group list-group-flush">
-//                         <li class="list-group-item">${id}</li>
-//                         <li class="list-group-item">Email: <a href="#" class="card-link">${email}</a></li>
-//                         <li class="list-group-item">GitHub: <a href="#" class="card-link">${github}</a></li>
-//                     </ul>
-//                 </div>
-//             </div>
-//         </div> 
-//     </div>
-//     `}).join(''))};
-
-//     ${data.filter(({ interns })).forEach(item => item.map(({ name, id, email, officeNumber }) =>  {
-//     return `<div class="col-3">
-//         <div class="card" style="width: 18rem;">
-//             <div class="card-body">
-            
-//                 <h5 class="card-title">${name}</h5>
-//                 <h5>Intern</h5>
-//             </div>
-//             <div class="d-flex justify-content-center">
-//                 <div class="pt-10 border border-dark w-75">
-//                     <ul class="list-group list-group-flush">
-//                         <li class="list-group-item">${id}</li>
-//                         <li class="list-group-item">Email: <a href="#" class="card-link">${email}</a></li>
-//                         <li class="list-group-item">School: ${school}</li>
-//                     </ul>
-//                 </div>
-//             </div>
-//         </div> 
-//     </div>
-//     `}).join(''))};
-//     `;
